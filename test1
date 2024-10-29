@@ -1,0 +1,40 @@
+amplify init
+amplify add auth
+amplify push
+npm install aws-amplify @aws-amplify/ui-react
+import Amplify from 'aws-amplify';
+import awsExports from './aws-exports';
+Amplify.configure(awsExports);
+import { Auth } from 'aws-amplify';
+import { useState } from 'react';
+
+function Login() {
+  const [rut, setRut] = useState('');
+  const [error, setError] = useState('');
+
+  const handleLogin = async () => {
+    try {
+      await Auth.signIn(rut); // Aquí se usa el RUT como nombre de usuario
+      alert('Inicio de sesión exitoso');
+    } catch (e) {
+      setError('Error al iniciar sesión. Verifica tu RUT.');
+    }
+  };
+
+  return (
+    <div>
+      <h2>Iniciar Sesión</h2>
+      <input
+        type="text"
+        placeholder="Ingrese su RUT"
+        value={rut}
+        onChange={(e) => setRut(e.target.value)}
+      />
+      <button onClick={handleLogin}>Iniciar sesión</button>
+      {error && <p>{error}</p>}
+    </div>
+  );
+}
+
+export default Login;
+amplify publish
